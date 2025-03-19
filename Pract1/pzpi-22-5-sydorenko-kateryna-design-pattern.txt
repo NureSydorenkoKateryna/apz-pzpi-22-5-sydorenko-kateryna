@@ -1,0 +1,216 @@
+
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ
+УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+Кафедра «Програмної інженерії»
+
+
+ЗВІТ
+з практичної роботи  № 1
+з дисципліни «Архітектура програмного забезпечення»
+на тему «Патерни проєктування»
+
+
+
+Виконав ст. гр ПЗПІ-22-5
+Сидоренко Катерина Сергіївна
+
+Перевірив
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+Харків 2025
+
+
+
+
+
+1 ІСТОРІЯ ЗМІН
+
+№ДатаВерсія звіту Опис змін та виправлень117.03.20250.1Створено розділи «Мета» та «Завдання»218.03.20250.2Створено розділи «Хід роботи» та «Висновки»319.03.20250.3Додано додатки А, Б та В
+2 ЗАВДАННЯ
+
+	У межах даної роботи необхідно. Обрати один із патернів проєктування (крім Singleton) та детально вивчити його призначення, принципи роботи та сфери застосування. Підготувати презентацію, яка міститиме теоретичний опис патерна, діаграми та реальні приклади використання.
+
+3 ОПИС ВИКОНАНОЇ РОБОТИ
+
+     У межах даної роботи було обрано патерн «Декоратор» як один із структурних патернів проєктування. Його основна ідея полягає в динамічному розширенні функціональності об’єктів без зміни їхнього коду. Це досягається шляхом обгортання об'єкта в спеціальний клас-декоратор, який додає нову поведінку.
+     Патерн "Декоратор" використовується у випадках, коли потрібно зберегти гнучкість коду та уникнути створення великої кількості підкласів для розширення функціональності. Його основні переваги включають підтримку принципу відкритості/закритості (OCP), можливість комбінування різних декораторів і зменшення залежностей між класами.
+     Під час вивчення патерна було проаналізовано його реальне використання в програмуванні. Зокрема, він широко застосовується у наступних випадках:
+     1. Кешування даних – збереження результатів операцій для зменшення навантаження на базу даних або зовнішні API;
+     2. Обробка потоків (I/O Streams) – застосовується у мовах програмування, таких як Java та C#, для роботи з вхідними та вихідними потоками;
+     3. Робота з графічним інтерфейсом – використовується для створення гнучких і розширюваних UI-компонентів;
+     4. Middleware – застосовується у веб-розробці для послідовної  обробки HTTP-запитів.
+     Для перевірки роботи патерна було розроблено програмний код на C#. Було реалізовано CachedAnswerRepository, який додає кешування до стандартного репозиторію відповідей (AnswerRepository). У цьому підході CachedAnswerRepository виступає як декоратор, який перевіряє наявність даних у кеші перед зверненням до бази даних.
+     Таким чином, у ході виконання роботи було досліджено патерн "Декоратор", а й реалізовано його у програмному коді.
+
+
+   4 ВИСНОВКИ
+   
+     У ході виконання цієї практичної роботи було детально вивчено патерн "Декоратор", його призначення, принципи роботи та відмінності від інших структурних патернів. Ознайомлено з основними сценаріями його використання, такими як кешування, обробка потоків даних, розширення UI-компонентів та middleware у веб-розробці.
+     Було реалізовано код на C#, у якому застосовано "Декоратор" для додавання кешування до репозиторію відповідей (CachedAnswerRepository). Це дозволяє зменшити кількість запитів до бази даних та підвищити продуктивність системи.
+     Завдяки виконанню цієї роботи вдалося не лише поглибити знання про патерни проєктування, а й на практиці застосувати їх для вирішення реальних завдань у програмуванні.
+
+
+   ДОДАТОК А
+   
+   Посилання на відеозапис доповіді та текст хронологічного опису доповіді
+   
+   Відеозапис доповіді на YouTube: https://youtu.be/euKj174PhPo 
+   Хронологічний опис відео:
+00:00 Вступ 
+00:11 Визначення патерну Декоратор 
+00:28 Коли доречно використовувати шаблон 
+01:08 Приклад з реального світу 
+01:28 Структура патерну 
+02:15 Способи використання (I/O Streams, UI Components, Caching) 
+03:23 Способи використання (Logging/Monitoring, Text Processing, Middleware) 
+04:23 Приклад коду. Реалізація репозиторію декоратору 
+05:47 Порівняння з Adapter, Facade, Proxy 
+07:47 Висновки 
+08:28 Використані джерела
+
+
+   ДОДАТОК Б
+   
+   Слайди презентації доповіді
+
+
+Рисунок Б.1 – Титульний слайд
+
+
+Рисунок Б.2 – Визначення шаблону «Декоратор»
+
+Рисунок Б.3 – Коли доцільно використовувати шаблон
+
+
+Рисунок Б.4 – Приклад з реального світу
+
+
+
+Рисунок Б.5 – Структура шаблону
+
+
+Рисунок Б.6 – Способи використання
+
+
+
+Рисунок Б.7 – Способи використання
+
+
+Рисунок Б.8 – Приклад реалізації
+
+Рисунок Б.9 – Порівняння з Adapter, Facade, Proxy патернами
+
+
+Рисунок Б.10 – Висновки
+
+
+Рисунок Б.11 – Використані джерела
+
+
+
+   ДОДАТОК В
+   
+Приклади програмного коду
+
+  1  using System.Threading.Tasks;
+  2
+  3  public interface ICacheRepository<T> where T : class
+  4  {
+  5      Task<List<T>> Get(string key);
+  6      Task Set(string key, T value);
+  7      Task Set(string key, List<T> value);
+  8      Task Remove(string key);
+  9  }
+ 10
+ 11  public interface IAnswerRepository
+ 12  {
+ 13      Task<List<Answer>> GetAnswers(long questionId);
+ 14  }
+ 15
+ 16  public class Answer
+ 17  {
+ 18      public long Id { get; set; }
+ 19      public string Text { get; set; }
+ 20      public long QuestionId { get; set; }
+ 21      public bool IsCorrect { get; set; }
+ 22  }
+ 23
+ 24  public class AnswerRepository : IAnswerRepository
+ 25  {
+ 26      public async Task<List<Answer>> GetAnswers(long questionId)
+ 27      {
+ 28          throw new NotImplementedException();
+ 29      }
+ 30  }
+ 31
+ 32  public class InMemoryCacheRepository<T> : ICacheRepository<T>
+ 33      where T : class
+ 34  {
+ 35      public async Task Remove(string key)
+ 36      {
+ 37          throw new NotImplementedException();
+ 38      }
+ 39
+ 40      public async Task Set(string key, T value)
+ 41      {
+ 42          throw new NotImplementedException();
+ 43      }
+ 44
+ 45      public async Task Set(string key, List<T> value)
+ 46      {
+ 47          throw new NotImplementedException();
+ 48      }
+ 49
+ 50      public async Task<List<T>> Get(string key)
+ 51      {
+ 52          throw new NotImplementedException();
+ 53      }
+ 54  }
+ 55  public class CachedAnswerRepository : IAnswerRepository
+ 56  {
+ 57      private readonly IAnswerRepository _answerRepository;
+ 58      private readonly ICacheRepository<Answer> _cacheRepository;
+ 59      public CachedAnswerRepository(
+ 60          IAnswerRepository answerRepository,
+ 61          ICacheRepository<Answer> cacheRepository)
+ 62      {
+ 63          _answerRepository = answerRepository;
+ 64          _cacheRepository = cacheRepository;
+ 65      }
+ 66
+ 67      public async Task<List<Answer>> GetAnswers(long questionId)
+ 68      {
+ 69          var answers = await _cacheRepository.Get(questionId.ToString());
+ 70          if (answers.Any())
+ 71          {
+ 72              return answers;
+ 73          }
+ 74
+ 75          var dbAnswers = await _answerRepository.GetAnswers(questionId);
+ 76
+ 77          await _cacheRepository.Set(questionId.ToString(), dbAnswers);
+ 78
+ 79          return dbAnswers;
+ 80      }
+ 81  }
+ 82
+ 83  public class Program
+ 84  {
+ 85      public static async Task Main(string[] args)
+ 86      {
+ 87          var answerRepository = new AnswerRepository();
+ 88          var cacheRepository = new InMemoryCacheRepository<Answer>();
+ 89          var cachedAnswerRepository = new CachedAnswerRepository(answerRepository, cacheRepository);
+ 90          var answers = await cachedAnswerRepository.GetAnswers(1);
+ 91      }
+ 92  }
+
+2
+
+
