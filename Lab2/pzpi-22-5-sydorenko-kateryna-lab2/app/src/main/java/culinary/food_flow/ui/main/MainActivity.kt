@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import culinary.food_flow.data.remote.ApiClient
 import culinary.food_flow.ui.main.viewmodel.RecipeViewModel
@@ -88,6 +89,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
                     MainScreen(
                         modifier = Modifier.padding(paddingValues)
+                            .padding(2.dp, 10.dp)
                     )
                 }
             }

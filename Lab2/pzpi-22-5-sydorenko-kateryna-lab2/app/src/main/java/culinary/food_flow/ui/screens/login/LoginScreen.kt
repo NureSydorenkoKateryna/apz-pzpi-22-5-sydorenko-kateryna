@@ -24,6 +24,8 @@ import culinary.food_flow.ui.main.viewmodel.AuthViewModel
 import culinary.food_flow.ui.main.viewmodel.AuthViewModelFactory
 import culinary.food_flow.ui.main.viewmodel.LoginState
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 
 @Composable
 fun LoginScreen(
@@ -41,7 +43,10 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
         TextField(
             value = username,
@@ -75,7 +80,6 @@ fun LoginScreen(
     when (loginState) {
         is LoginState.Success -> {
             val token = (loginState as LoginState.Success).token
-            // You can save token here if needed
             onLoginSuccess()
         }
         is LoginState.Error -> {
@@ -83,12 +87,9 @@ fun LoginScreen(
             Toast.makeText(LocalContext.current, errorMessage, Toast.LENGTH_SHORT).show()
         }
         LoginState.Loading -> {
-            // You can show a loading spinner here
-
             //CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
         LoginState.Idle -> {
-            // Nothing to do
         }
     }
 }

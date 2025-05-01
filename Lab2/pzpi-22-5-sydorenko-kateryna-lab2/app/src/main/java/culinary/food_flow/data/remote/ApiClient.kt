@@ -15,19 +15,22 @@ import javax.net.ssl.*
 object ApiClient {
     private const val BASE_URL = "https://10.0.2.2:7198/api/"
 
-    lateinit var tokenManager: TokenManager
+    private lateinit var tokenManager: TokenManager
+    // private var onUnauthorized: (() -> Unit)? = null
 
     fun init(tokenManager: TokenManager) {
         this.tokenManager = tokenManager
+        // this.onUnauthorized = onUnauthorized
+
+        retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(getUnsafeOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
+    lateinit var retrofit: Retrofit
+        private set
 
     private fun getUnsafeOkHttpClient(): OkHttpClient {
         val trustAllCerts = arrayOf<TrustManager>(
@@ -40,7 +43,6 @@ object ApiClient {
 
         val sslContext = SSLContext.getInstance("SSL")
         sslContext.init(null, trustAllCerts, SecureRandom())
-
         val sslSocketFactory = sslContext.socketFactory
 
         val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -51,24 +53,29 @@ object ApiClient {
             .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
             .hostnameVerifier { _, _ -> true }
             .addInterceptor { chain ->
-                val original = chain.request()
+                val originalRequest = chain.request()
                 val token = runBlocking { tokenManager.token.first() }
 
-                val requestBuilder = original.newBuilder()
+                val requestBuilder = originalRequest.newBuilder()
                 token?.let {
                     requestBuilder.addHeader("Authorization", "Bearer $it")
                 }
-                val request = requestBuilder.build()
-                chain.proceed(request)
+                val requestWithAuth = requestBuilder.build()
+
+                val response = chain.proceed(requestWithAuth)
+
+                if (response.code == 401) {
+                    runBlocking {
+                        tokenManager.clearToken()
+                    }
+                    // onUnauthorized?.invoke()
+                }
+
+                response
             }
             .addInterceptor(loggingInterceptor)
             .build()
     }
-
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(getUnsafeOkHttpClient())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 }
+
 

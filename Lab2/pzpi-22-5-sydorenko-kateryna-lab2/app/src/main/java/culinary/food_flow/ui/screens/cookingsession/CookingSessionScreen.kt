@@ -44,7 +44,6 @@ fun CookingSessionScreen(
 
     val measurementToken by measurementViewModel.culinaryToken.collectAsState()
     val isSubmitting by measurementViewModel.isSubmitting.collectAsState()
-    val context = LocalContext.current
 
     var inputValue by remember { mutableStateOf("") }
 
@@ -65,6 +64,23 @@ fun CookingSessionScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (measurementToken == null) {
+            Button(
+                onClick = {
+                    selectedRecipe?.let { recipe ->
+                        selectedIngredient?.let { ingredient ->
+                            measurementViewModel.getToken(
+                                productId = ingredient.productId.toString(),
+                                techCardId = recipe.id.toString()
+                            )
+                        }
+                    }
+                }
+            ) {
+                Text("Start Manual Measurement")
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             Button(
                 onClick = {
                     selectedRecipe?.let { recipe ->
@@ -120,7 +136,12 @@ fun CookingSessionScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { onBack() },
+            onClick = {
+                    measurementViewModel.finishToken {
+                        onComplete()
+                    }
+                    onBack()
+                },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text("Back")

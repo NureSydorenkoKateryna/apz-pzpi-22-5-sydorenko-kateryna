@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 
@@ -24,9 +25,11 @@ class TokenManager(private val context: Context) {
         }
     }
 
-    suspend fun clearToken() {
-        context.dataStore.edit { preferences ->
-            preferences.remove(TOKEN_KEY)
+    fun clearToken() {
+        runBlocking {
+            context.dataStore.edit { prefs ->
+                prefs.remove(TOKEN_KEY)
+            }
         }
     }
 }
