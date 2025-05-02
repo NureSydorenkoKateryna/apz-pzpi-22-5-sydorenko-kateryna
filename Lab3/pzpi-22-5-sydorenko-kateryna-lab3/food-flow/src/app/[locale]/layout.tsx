@@ -4,6 +4,7 @@ import Header from '@/layouts/base/header';
 import Providers from '@/lib/providers/providers';
 import { hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
+import { Toaster } from 'sonner';
 import './globals.css';
 
 export default async function LocaleLayout({
@@ -23,7 +24,8 @@ export default async function LocaleLayout({
       <body className="min-h-screen grid grid-rows-[auto_1fr_auto] bg-[var(--background)] text-[var(--foreground)]">
         <Providers>
           <Header />
-          <main className="h-full">{children}</main>
+          <main>{children}</main>
+          <Toaster />
           <Footer />
         </Providers>
       </body>

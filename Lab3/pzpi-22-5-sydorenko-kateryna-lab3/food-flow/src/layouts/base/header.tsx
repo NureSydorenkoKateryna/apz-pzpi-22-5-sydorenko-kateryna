@@ -3,13 +3,15 @@
 import { LanguageSwitcher } from '@/components/localeSwitcher';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/providers/authProvider';
-import { UtensilsCrossed } from 'lucide-react';
+import { LogOut, UtensilsCrossed } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
+  const t = useTranslations('LogIn');
 
   return (
     <header className="bg-white shadow-sm">
@@ -20,7 +22,8 @@ export default function Header() {
         </Link>
 
         <nav className="flex items-center gap-4">
-          {isAuthenticated && (
+          <LanguageSwitcher />
+          {isAuthenticated ? (
             <>
               <Link
                 href="/dashboard"
@@ -38,12 +41,23 @@ export default function Header() {
               >
                 Menu
               </Link>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  logout();
+                }}
+                className="text-sm"
+              >
+                {t('logout')}
+              </Button>
             </>
+          ) : (
+            <Button variant="outline" asChild>
+              <Link href="/login">
+                <LogOut />
+              </Link>
+            </Button>
           )}
-          <LanguageSwitcher />
-          <Button variant="outline" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
         </nav>
       </div>
     </header>

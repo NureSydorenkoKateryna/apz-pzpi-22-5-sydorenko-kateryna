@@ -2,7 +2,18 @@
     "HomePage": {
       "title": "Welcome to FoodFlow",
       "subtitle": "Track your resturant leftovers and reduce food waste",
-      "about": "Learn more about us"
+      "about": "Learn more about us",
+      "logout": "Logout"
+    },
+    "LogIn": {
+        "login": "Login",
+        "enterPassword": "Enter your password",
+        "enterEmail": "Enter your email",
+        "dontHaveAccount": "Don't have an account?",
+        "register": "Register",
+        "email": "Email",
+        "password": "Password",
+        "logout": "Logout"
     }
   }
   
