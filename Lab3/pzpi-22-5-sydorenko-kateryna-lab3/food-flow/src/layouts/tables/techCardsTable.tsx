@@ -1,5 +1,6 @@
 'use client';
 
+import { Spinner } from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,8 +10,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import useProductsService from '@/services/products/service';
 import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const mockTechCards: TechCardDto[] = [
   {
@@ -35,26 +37,37 @@ const mockTechCards: TechCardDto[] = [
   },
 ];
 
-const mockProducts: { id: number; name: string; unit: string }[] = [
-  { id: 101, name: 'Flour', unit: 'g' },
-  { id: 102, name: 'Tomato Sauce', unit: 'ml' },
-  { id: 103, name: 'Mozzarella', unit: 'g' },
-  { id: 201, name: 'Romaine Lettuce', unit: 'g' },
-  { id: 202, name: 'Caesar Dressing', unit: 'ml' },
-  { id: 203, name: 'Croutons', unit: 'g' },
-  { id: 204, name: 'Parmesan', unit: 'g' },
-  { id: 205, name: 'Olive Oil', unit: 'ml' },
-];
-
 export default function TechCardTable() {
   const [techCards, setTechCards] = useState<TechCardDto[]>(mockTechCards);
-  const [products] = useState(mockProducts);
+  const [products, setProducts] = useState<ProductDto[]>([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const { getProducts } = useProductsService();
   const [selectedCard, setSelectedCard] = useState<TechCardDto | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCard, setEditedCard] = useState<TechCardDto | null>(null);
   const [nextIngredientId, setNextIngredientId] = useState(1000);
   const [newIngredientId, setNewIngredientId] = useState('');
   const [newIngredientQty, setNewIngredientQty] = useState('');
+
+  useEffect(() => {
+    setIsLoading(true);
+    getProducts()
+      .then(data => {
+        setProducts(data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center mt-35">
+        <Spinner />
+      </div>
+    );
+  }
 
   const startEditing = () => {
     if (selectedCard) {

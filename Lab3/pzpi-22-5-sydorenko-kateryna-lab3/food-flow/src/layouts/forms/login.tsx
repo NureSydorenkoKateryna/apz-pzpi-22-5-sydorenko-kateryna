@@ -16,14 +16,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import useAccountService from '@/services/account/service';
 import { useTranslations } from 'next-intl';
-
-import { useAuth } from '@/lib/providers/authProvider';
-import { useRouter } from 'next/navigation';
-// import { useAppDispatch } from '@/services/hooks';
-// import { login } from '@/services/features/account/api';
-// import { setUser } from '@/services/features/account/slice';
-// import { getErrorMessage } from '@/services/helpers';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -34,11 +28,8 @@ type LoginData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
   const t = useTranslations('LogIn');
-
-  //   const dispatch = useAppDispatch();
-  const { login: setToken } = useAuth();
+  const { logIn } = useAccountService();
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -49,19 +40,7 @@ export function LoginForm() {
   });
 
   const onSubmit = (data: LoginData) => {
-    console.log('Form submitted:', data);
-    router.push('/tech-cards');
-    // login({ email: data.email, password: data.password })
-    //   .then((res) => {
-    //     dispatch(setUser(res.user));
-    //     setToken(res.token);
-    //     router.replace('/dashboard'); // Adjust route
-    //     router.refresh();
-    //   })
-    //   .catch((err) => {
-    //     const errorRes = getErrorMessage(err);
-    //     toast.error(errorRes.message);
-    //   });
+    logIn(data.email, data.password);
   };
 
   return (
@@ -112,7 +91,7 @@ export function LoginForm() {
           )}
         />
 
-        <Button type="submit" className="w-full" onClick={() => setToken('44455sdffdsf')}>
+        <Button type="submit" className="w-full" onClick={() => onSubmit(form.getValues())}>
           {t('login')}
         </Button>
       </form>

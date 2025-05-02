@@ -1,5 +1,6 @@
 'use client';
 
+import { Spinner } from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import useProductsService from '@/services/products/service';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -95,10 +97,23 @@ export default function ProductTable() {
   const [products, setProducts] = useState<ProductWithRest[]>([]);
   const [search, setSearch] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const { getProductsWithRests } = useProductsService();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setProducts(mockProductsWithRests); // Assume mockProductsWithRests is imported
+    getProductsWithRests().then(response => {
+      setProducts(response);
+      setIsLoading(false);
+    });
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center mt-35">
+        <Spinner />
+      </div>
+    );
+  }
 
   const handleQuantityChange = async (productId: number, quantity: number) => {
     const product = products.find(p => p.id === productId);
@@ -127,7 +142,7 @@ export default function ProductTable() {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="container mx-auto p-4">
       {/* Header: Search & Create Button */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <Input
