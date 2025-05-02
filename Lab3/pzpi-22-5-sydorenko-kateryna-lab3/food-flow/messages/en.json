@@ -1,6 +1,8 @@
 {
     "HomePage": {
-      "title": "Hello world!",
-      "about": "Go to the about page"
+      "title": "Welcome to FoodFlow",
+      "subtitle": "Track your resturant leftovers and reduce food waste",
+      "about": "Learn more about us"
     }
   }
+  
