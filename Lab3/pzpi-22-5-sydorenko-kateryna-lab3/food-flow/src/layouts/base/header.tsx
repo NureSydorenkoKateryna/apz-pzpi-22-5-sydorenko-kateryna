@@ -48,13 +48,13 @@ export default function Header() {
                 }}
                 className="text-sm"
               >
-                {t('logout')}
+                <LogOut />
               </Button>
             </>
           ) : (
             <Button variant="outline" asChild>
               <Link href="/login">
-                <LogOut />
+                <span className="text-sm">{t('login')}</span>
               </Link>
             </Button>
           )}

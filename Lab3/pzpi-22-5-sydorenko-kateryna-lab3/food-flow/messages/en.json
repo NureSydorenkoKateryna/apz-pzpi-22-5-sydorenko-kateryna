@@ -5,7 +5,8 @@
       "about": "Learn more about us",
       "logout": "Logout",
       "dashboard": "Dashboard",
-      "techCards": "Recipes"
+      "techCards": "Recipes",
+      "login": "Login"
     },
     "LogIn": {
         "login": "Login",

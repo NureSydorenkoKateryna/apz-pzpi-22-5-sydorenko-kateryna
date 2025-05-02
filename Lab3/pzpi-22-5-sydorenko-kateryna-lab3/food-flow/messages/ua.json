@@ -5,7 +5,8 @@
         "about": "Дізнайтеся більше про нас",
         "logout": "Вийти",
         "dashboard": "Панель",
-        "techCards": "Рецепти"
+        "techCards": "Рецепти",
+        "login": "Увійти"
     },
     "LogIn": {
         "login": "Увійти",

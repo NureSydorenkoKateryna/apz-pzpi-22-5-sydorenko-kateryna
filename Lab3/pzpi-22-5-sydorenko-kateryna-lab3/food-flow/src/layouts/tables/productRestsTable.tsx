@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export const mockProductsWithRests: ProductWithRest[] = [
@@ -78,6 +79,16 @@ export const mockProductsWithRests: ProductWithRest[] = [
       updatedAt: '2025-04-30T11:25:00Z',
     },
   },
+  ...Array.from({ length: 100 }, (_, i) => ({
+    id: i + 8,
+    name: `Product ${i + 8}`,
+    unit: 'kg',
+    rest: {
+      productId: (i + 8).toString(),
+      quantity: Math.floor(Math.random() * 100),
+      updatedAt: new Date(Date.now() - Math.random() * 10000000000).toISOString(),
+    },
+  })),
 ];
 
 export default function ProductTable() {
@@ -105,6 +116,10 @@ export default function ProductTable() {
           : p
       )
     );
+  };
+
+  const removeProduct = (productId: number) => {
+    setProducts(prev => prev.filter(p => p.id !== productId));
   };
 
   const filteredProducts = products.filter(p =>
@@ -153,6 +168,7 @@ export default function ProductTable() {
               <th className="px-4 py-3 font-medium">Unit</th>
               <th className="px-4 py-3 font-medium">Rest</th>
               <th className="px-4 py-3 font-medium">Updated At</th>
+              <th className="px-4 py-3 font-medium">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -170,6 +186,16 @@ export default function ProductTable() {
                 </td>
                 <td className="px-4 py-2 text-muted-foreground text-xs">
                   {product.rest?.updatedAt && new Date(product.rest.updatedAt).toLocaleString()}
+                </td>
+                <td className="px-4 py-2">
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="h-8 w-8 ml-2"
+                    onClick={() => removeProduct(product.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </td>
               </tr>
             ))}

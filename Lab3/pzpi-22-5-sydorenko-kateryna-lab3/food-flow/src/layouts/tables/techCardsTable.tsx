@@ -9,9 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
-export const mockTechCards: TechCardDto[] = [
+const mockTechCards: TechCardDto[] = [
   {
     id: 1,
     name: 'Margherita Pizza',
@@ -34,10 +35,26 @@ export const mockTechCards: TechCardDto[] = [
   },
 ];
 
+const mockProducts: { id: number; name: string; unit: string }[] = [
+  { id: 101, name: 'Flour', unit: 'g' },
+  { id: 102, name: 'Tomato Sauce', unit: 'ml' },
+  { id: 103, name: 'Mozzarella', unit: 'g' },
+  { id: 201, name: 'Romaine Lettuce', unit: 'g' },
+  { id: 202, name: 'Caesar Dressing', unit: 'ml' },
+  { id: 203, name: 'Croutons', unit: 'g' },
+  { id: 204, name: 'Parmesan', unit: 'g' },
+  { id: 205, name: 'Olive Oil', unit: 'ml' },
+];
+
 export default function TechCardTable() {
+  const [techCards, setTechCards] = useState<TechCardDto[]>(mockTechCards);
+  const [products] = useState(mockProducts);
   const [selectedCard, setSelectedCard] = useState<TechCardDto | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCard, setEditedCard] = useState<TechCardDto | null>(null);
+  const [nextIngredientId, setNextIngredientId] = useState(1000);
+  const [newIngredientId, setNewIngredientId] = useState('');
+  const [newIngredientQty, setNewIngredientQty] = useState('');
 
   const startEditing = () => {
     if (selectedCard) {
@@ -52,12 +69,10 @@ export default function TechCardTable() {
   };
 
   const saveEdit = () => {
-    if (editedCard) {
-      console.log('Saved:', editedCard);
-      setSelectedCard(editedCard); // update view
-      // todo: update the original card in the list
-      setIsEditing(false);
-    }
+    if (!editedCard) return;
+    setTechCards(prev => prev.map(card => (card.id === editedCard.id ? editedCard : card)));
+    setSelectedCard(editedCard);
+    setIsEditing(false);
   };
 
   const updateField = (key: keyof TechCardDto, value: unknown) => {
@@ -65,18 +80,41 @@ export default function TechCardTable() {
     setEditedCard(prev => ({ ...prev!, [key]: value }));
   };
 
-  const updateIngredientAmount = (index: number, value: number) => {
+  const updateIngredient = (index: number, key: keyof IngredientDto, value: unknown) => {
     if (!editedCard) return;
-    const updatedIngredients = [...editedCard.ingredients];
-    updatedIngredients[index] = { ...updatedIngredients[index], amount: value };
-    setEditedCard(prev => ({ ...prev!, ingredients: updatedIngredients }));
+    const ingredients = [...editedCard.ingredients];
+    ingredients[index] = { ...ingredients[index], [key]: value };
+    setEditedCard(prev => ({ ...prev!, ingredients }));
   };
 
-  const updateIngredientName = (index: number, value: string) => {
+  const deleteIngredient = (id: number) => {
     if (!editedCard) return;
-    const updatedIngredients = [...editedCard.ingredients];
-    updatedIngredients[index] = { ...updatedIngredients[index], name: value };
-    setEditedCard(prev => ({ ...prev!, ingredients: updatedIngredients }));
+    const ingredients = editedCard.ingredients.filter(ing => ing.id !== id);
+    setEditedCard(prev => ({ ...prev!, ingredients }));
+  };
+
+  const addIngredient = () => {
+    if (!editedCard || !newIngredientId || !newIngredientQty) return;
+
+    const product = products.find(p => p.id.toString() === newIngredientId);
+    if (!product) return;
+
+    const newIngredient: IngredientDto = {
+      id: nextIngredientId,
+      productId: product.id,
+      name: product.name,
+      unit: product.unit,
+      amount: parseFloat(newIngredientQty),
+    };
+
+    setEditedCard(prev => ({
+      ...prev!,
+      ingredients: [...prev!.ingredients, newIngredient],
+    }));
+
+    setNextIngredientId(prev => prev + 1);
+    setNewIngredientId('');
+    setNewIngredientQty('');
   };
 
   return (
@@ -93,14 +131,22 @@ export default function TechCardTable() {
             </tr>
           </thead>
           <tbody>
-            {mockTechCards.map(card => (
+            {techCards.map(card => (
               <tr key={card.id} className="border-t">
                 <td className="px-6 py-4">{card.id}</td>
                 <td className="px-6 py-4">{card.name}</td>
                 <td className="px-6 py-4 text-right">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" onClick={() => setSelectedCard(card)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedCard(card);
+                          setIsEditing(false);
+                          setEditedCard(null);
+                        }}
+                      >
                         View
                       </Button>
                     </DialogTrigger>
@@ -117,78 +163,125 @@ export default function TechCardTable() {
 
                       {selectedCard && (
                         <div className="mt-4 space-y-4">
+                          {/* Name */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Name
-                            </label>
+                            <label className="block text-sm font-medium mb-1">Name</label>
                             {isEditing ? (
                               <input
                                 type="text"
                                 value={editedCard?.name}
                                 onChange={e => updateField('name', e.target.value)}
-                                className="w-full border px-3 py-2 rounded-md text-sm"
+                                className="w-full border px-3 py-2 rounded text-sm"
                               />
                             ) : (
                               <p className="text-sm">{selectedCard.name}</p>
                             )}
                           </div>
 
+                          {/* Description */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Description
-                            </label>
+                            <label className="block text-sm font-medium mb-1">Description</label>
                             {isEditing ? (
                               <textarea
                                 value={editedCard?.description}
                                 onChange={e => updateField('description', e.target.value)}
-                                className="w-full border px-3 py-2 rounded-md text-sm"
+                                className="w-full border px-3 py-2 rounded text-sm"
                               />
                             ) : (
                               <p className="text-sm">{selectedCard.description}</p>
                             )}
                           </div>
 
+                          {/* Ingredients */}
                           <div>
                             <h3 className="font-semibold text-sm mb-2">Ingredients:</h3>
                             <ul className="space-y-2 text-sm">
-                              {selectedCard.ingredients.map((ing, index) => (
-                                <li
-                                  key={ing.id}
-                                  className="flex justify-between items-center gap-2 border-b py-1"
-                                >
-                                  {isEditing ? (
-                                    <input
-                                      type="text"
-                                      value={editedCard?.ingredients[index].name}
-                                      onChange={e => updateIngredientName(index, e.target.value)}
-                                      className="flex-1 border px-2 py-1 rounded"
-                                    />
-                                  ) : (
-                                    <span className="flex-1">{ing.name}</span>
-                                  )}
-
+                              {(isEditing
+                                ? editedCard ?? selectedCard
+                                : selectedCard
+                              ).ingredients.map((ing, index) => (
+                                <li key={ing.id} className="flex items-center gap-2 border-b py-1">
                                   {isEditing ? (
                                     <>
                                       <input
-                                        type="number"
-                                        value={editedCard?.ingredients[index].amount}
+                                        type="text"
+                                        value={ing.name}
                                         onChange={e =>
-                                          updateIngredientAmount(index, parseFloat(e.target.value))
+                                          updateIngredient(index, 'name', e.target.value)
+                                        }
+                                        className="flex-1 border px-2 py-1 rounded"
+                                      />
+                                      <input
+                                        type="number"
+                                        value={ing.amount}
+                                        onChange={e =>
+                                          updateIngredient(
+                                            index,
+                                            'amount',
+                                            parseFloat(e.target.value)
+                                          )
                                         }
                                         className="w-20 border px-2 py-1 rounded"
                                       />
                                       <span>{ing.unit}</span>
+                                      <Button
+                                        variant="destructive"
+                                        size="icon"
+                                        onClick={() => deleteIngredient(ing.id)}
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </Button>
                                     </>
                                   ) : (
-                                    <span>
-                                      {ing.amount} {ing.unit}
-                                    </span>
+                                    <>
+                                      <span className="flex-1">{ing.name}</span>
+                                      <span>
+                                        {ing.amount} {ing.unit}
+                                      </span>
+                                    </>
                                   )}
                                 </li>
                               ))}
                             </ul>
                           </div>
 
+                          {/* Add Ingredient */}
+                          {isEditing && (
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-semibold">Add Ingredient</h4>
+                              <div className="flex gap-2">
+                                <select
+                                  value={newIngredientId}
+                                  onChange={e => setNewIngredientId(e.target.value)}
+                                  className="flex-1 border px-2 py-1 rounded text-sm"
+                                >
+                                  <option value="">Select Product</option>
+                                  {products.map(p => {
+                                    const isUsed = editedCard?.ingredients.some(
+                                      i => i.productId === p.id
+                                    );
+                                    return (
+                                      <option key={p.id} value={p.id} disabled={isUsed}>
+                                        {p.name} ({p.unit}) {isUsed ? '✓' : ''}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                                <input
+                                  type="number"
+                                  placeholder="Quantity"
+                                  value={newIngredientQty}
+                                  onChange={e => setNewIngredientQty(e.target.value)}
+                                  className="w-24 border px-2 py-1 rounded text-sm"
+                                />
+                                <Button size="sm" onClick={addIngredient}>
+                                  Add
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
                           <div className="flex justify-end gap-2 pt-4">
                             {isEditing ? (
                               <>
