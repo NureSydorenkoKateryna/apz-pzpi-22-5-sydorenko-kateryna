@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -20,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/lib/providers/authProvider';
+import { useRouter } from 'next/navigation';
 // import { useAppDispatch } from '@/services/hooks';
 // import { login } from '@/services/features/account/api';
 // import { setUser } from '@/services/features/account/slice';
@@ -50,6 +50,7 @@ export function LoginForm() {
 
   const onSubmit = (data: LoginData) => {
     console.log('Form submitted:', data);
+    router.push('/tech-cards');
     // login({ email: data.email, password: data.password })
     //   .then((res) => {
     //     dispatch(setUser(res.user));

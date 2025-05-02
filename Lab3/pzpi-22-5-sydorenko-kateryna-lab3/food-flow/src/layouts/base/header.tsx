@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 export default function Header() {
   const { isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
-  const t = useTranslations('LogIn');
+  const t = useTranslations('HomePage');
 
   return (
     <header className="bg-white shadow-sm">
@@ -26,20 +26,20 @@ export default function Header() {
           {isAuthenticated ? (
             <>
               <Link
-                href="/dashboard"
+                href="/product-rests"
                 className={`text-sm font-medium ${
-                  pathname === '/dashboard' ? 'text-primary' : 'text-muted-foreground'
+                  pathname.includes('/product-rests') ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                Dashboard
+                {t('dashboard')}
               </Link>
               <Link
-                href="/menu"
+                href="/tech-cards"
                 className={`text-sm font-medium ${
-                  pathname === '/menu' ? 'text-primary' : 'text-muted-foreground'
+                  pathname.includes('/tech-cards') ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                Menu
+                {t('techCards')}
               </Link>
               <Button
                 variant="outline"
