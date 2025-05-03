@@ -1,6 +1,5 @@
 'use client';
 
-import { Spinner } from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,6 +12,7 @@ import {
 import useProductsService from '@/services/products/service';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import SpinnerContainer from '../base/spinnerContainer';
 
 const mockTechCards: TechCardDto[] = [
   {
@@ -62,11 +62,7 @@ export default function TechCardTable() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center mt-35">
-        <Spinner />
-      </div>
-    );
+    return <SpinnerContainer />;
   }
 
   const startEditing = () => {

@@ -19,3 +19,22 @@ interface ProductWithRest {
     updatedAt?: string;
   } | null;
 }
+
+interface UnitsResponse {
+  units: UnitDto[];
+}
+
+interface UnitDto {
+  id: number;
+  value: string;
+}
+
+interface CreateProductsRequest {
+  products: CreateProductRequest[];
+}
+
+interface CreateProductRequest {
+  name: string;
+  unitId: number;
+  shelfLifeDays: number;
+}
