@@ -76,13 +76,17 @@ export const updateProduct = async (
   productId: number,
   data: CreateProductRequest
 ) => {
+  const requestBody = {
+    products: [data],
+  };
+
   const response = await fetch(`${baseUrl}/products/${productId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(requestBody),
   });
 
   if (!response.ok) {
@@ -91,4 +95,3 @@ export const updateProduct = async (
 
   return response.json();
 };
-

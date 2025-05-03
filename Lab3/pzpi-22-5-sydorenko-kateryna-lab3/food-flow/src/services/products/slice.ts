@@ -110,6 +110,21 @@ const productSlice = createSlice({
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(p => p.id !== action.payload);
       })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        const { productId, data } = action.meta.arg;
+        const product = state.products.find(p => p.id === productId);
+
+        if (product) {
+          state.products = state.products.map(p => (p.id === productId ? { ...p, ...data } : p));
+        }
+        toast.success('Product updated successfully', {
+          description: 'The product has been updated.',
+          action: {
+            onClick: () => {},
+            label: 'Ok',
+          },
+        });
+      })
       .addCase(fetchUnits.fulfilled, (state, action) => {
         state.units = action.payload;
       })
@@ -129,14 +144,6 @@ const productSlice = createSlice({
           product.rest.quantity = quantity;
           product.rest.updatedAt = new Date().toLocaleDateString();
         }
-
-        toast.success('Rest quantity updated successfully', {
-          description: 'The rest quantity has been updated.',
-          action: {
-            onClick: () => {},
-            label: 'Ok',
-          },
-        });
       });
   },
 });

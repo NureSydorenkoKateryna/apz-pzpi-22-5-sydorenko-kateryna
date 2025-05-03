@@ -36,5 +36,5 @@ interface CreateProductsRequest {
 interface CreateProductRequest {
   name: string;
   unitId: number;
-  shelfLifeDays: number;
+  shelfLifeDays: number | null;
 }

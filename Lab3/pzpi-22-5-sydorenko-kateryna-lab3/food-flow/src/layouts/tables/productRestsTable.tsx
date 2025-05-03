@@ -25,6 +25,7 @@ import {
   fetchProductsWithRests,
   fetchUnits,
   setProductRests,
+  updateProduct,
 } from '@/services/products/slice';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -32,6 +33,7 @@ import SpinnerContainer from '../base/spinnerContainer';
 import ProductRestInput from './productRestInput';
 
 const baseUrl = process.env.NEXT_PUBLIC_MOVEMENTS_API_URL || 'http://localhost:5000/api';
+
 export default function ProductTable() {
   const dispatch = useAppDispatch();
   const { getToken } = useAuth();
@@ -41,6 +43,10 @@ export default function ProductTable() {
   const [selectedUnitId, setSelectedUnitId] = useState<number | null>(null);
   const [productName, setProductName] = useState('');
   const [shelfLifeDays, setShelfLifeDays] = useState(0);
+  const [editingProductId, setEditingProductId] = useState<number | null>(null);
+  const [editedName, setEditedName] = useState('');
+  // const [editedShelfLifeDays, setEditedShelfLifeDays] = useState(0);
+  const [editedUnitId, setEditedUnitId] = useState<number | null>(null);
 
   const unitsDictByNmae = units.reduce((acc, unit) => {
     acc[unit.value] = unit.id;
@@ -85,9 +91,9 @@ export default function ProductTable() {
     dispatch(deleteProduct({ token, productId }));
   };
 
-  const filteredProducts = products.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProducts = [...products]
+    .sort((a, b) => a.name?.localeCompare(b?.name))
+    .filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
 
   const handleCreateProduct = () => {
     if (!productName || !selectedUnitId) return;
@@ -183,28 +189,108 @@ export default function ProductTable() {
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.map(product => (
-              <tr key={product.id} className="border-t hover:bg-muted/10 transition">
-                <td className="px-4 py-2">{product.name}</td>
-                <td className="px-4 py-2">{product.unit}</td>
-                <td className="px-4 py-2">
-                  <ProductRestInput product={product} />
-                </td>
-                <td className="px-4 py-2 text-muted-foreground text-xs">
-                  {product.rest?.updatedAt && new Date(product.rest.updatedAt).toLocaleString()}
-                </td>
-                <td className="px-4 py-2">
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="h-8 w-8 ml-2"
-                    onClick={() => removeProduct(product.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {filteredProducts.map(product => {
+              const isEditing = editingProductId === product.id;
+
+              return (
+                <tr key={product.id} className="border-t hover:bg-muted/10 transition">
+                  <td className="px-4 py-2">
+                    {isEditing ? (
+                      <Input value={editedName} onChange={e => setEditedName(e.target.value)} />
+                    ) : (
+                      product.name
+                    )}
+                  </td>
+                  <td className="px-4 py-2">
+                    {isEditing ? (
+                      <Select
+                        value={editedUnitId ? unitsDictById[editedUnitId] : ''}
+                        onValueChange={value => setEditedUnitId(unitsDictByNmae[value])}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {units.map(unit => (
+                            <SelectItem key={unit.id} value={unit.value}>
+                              {unit.value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      product.unit
+                    )}
+                  </td>
+                  <td className="px-4 py-2">
+                    <ProductRestInput product={product} />
+                  </td>
+                  <td className="px-4 py-2 text-muted-foreground text-xs">
+                    {product.rest?.updatedAt && new Date(product.rest.updatedAt).toLocaleString()}
+                  </td>
+                  <td className="px-4 py-2 flex items-center gap-2">
+                    {isEditing ? (
+                      <>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            const token = getToken();
+                            if (!token || !editedName || !editedUnitId) return;
+
+                            dispatch(
+                              updateProduct({
+                                token,
+                                productId: product.id,
+                                data: {
+                                  name: editedName,
+                                  unitId: editedUnitId,
+                                  shelfLifeDays: null,
+                                },
+                              })
+                            ).then(() => {
+                              dispatch(fetchProductsWithRests(token));
+                              setEditingProductId(null);
+                            });
+                          }}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingProductId(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => {
+                            setEditingProductId(product.id);
+                            setEditedName(product.name);
+                            setEditedUnitId(units.find(u => u.value === product.unit)?.id || null);
+                            // setEditedShelfLifeDays(product.shelfLifeDays ?? 0);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => removeProduct(product.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
