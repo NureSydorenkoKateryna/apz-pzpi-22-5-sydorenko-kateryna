@@ -1,17 +1,41 @@
 'use client';
-
+import SpinnerContainer from '@/layouts/base/spinnerContainer';
+import { useAuth } from '@/lib/providers/authProvider';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
-import { useAuth } from './providers/authProvider';
+import React, { ReactNode, useEffect, useState } from 'react';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+interface ProtectedRouteProps {
+  children: ReactNode;
+  allowedRoles: string[];
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
+  const { isAuthenticated, isLoading, getRole } = useAuth();
   const router = useRouter();
+
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
-    if (!isAuthenticated && !isLoading) {
-      router.push('/');
+    if (isLoading) return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
     }
-  }, [isAuthenticated, isLoading, router]);
+
+    if (!getRole) return;
+    const role = getRole();
+    if (role && !allowedRoles.includes(role)) {
+      router.push('/');
+      return;
+    }
+
+    setIsReady(true);
+  }, [isAuthenticated, isLoading, router, allowedRoles, getRole]);
+
+  if (!isReady) {
+    return <SpinnerContainer />;
+  }
 
   return <>{children}</>;
 };

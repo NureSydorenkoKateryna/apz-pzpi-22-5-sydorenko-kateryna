@@ -8,6 +8,8 @@ interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   getToken: () => string | null;
+  setRole?: (role: string) => void;
+  getRole?: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,6 +36,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(false);
   };
 
+  const setRole = (role: string) => {
+    localStorage.setItem('role', role);
+  };
+
+  const getRole = () => {
+    return localStorage.getItem('role');
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -41,7 +51,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         login,
         logout,
-        getToken: () => localStorage.getItem('token'),
+        getToken: () => localStorage?.getItem('token'),
+        setRole,
+        getRole,
       }}
     >
       {children}

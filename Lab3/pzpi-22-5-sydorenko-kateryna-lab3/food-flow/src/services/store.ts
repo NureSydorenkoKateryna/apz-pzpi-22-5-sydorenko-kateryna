@@ -1,12 +1,14 @@
 import { combineSlices, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import productSlice from './products/slice';
 import techCardsSlice from './tech-cards/slice';
+import usersSlice from './users/slice';
 
 const listenerMiddleware = createListenerMiddleware();
 
 const rootReducers = combineSlices({
-    [productSlice.name]: productSlice.reducer,
-    [techCardsSlice.name]: techCardsSlice.reducer,
+  [productSlice.name]: productSlice.reducer,
+  [techCardsSlice.name]: techCardsSlice.reducer,
+  [usersSlice.name]: usersSlice.reducer,
 });
 
 export const store = configureStore({

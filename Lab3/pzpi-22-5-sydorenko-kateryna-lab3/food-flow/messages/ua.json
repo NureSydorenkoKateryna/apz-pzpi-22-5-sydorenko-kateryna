@@ -6,7 +6,8 @@
         "logout": "Вийти",
         "dashboard": "Продукти",
         "techCards": "Рецепти",
-        "login": "Увійти"
+        "login": "Увійти",
+        "users": "Користувачі"
     },
     "LogIn": {
         "login": "Увійти",
@@ -54,6 +55,34 @@
         "viewButton": "Переглянути",
         "nameLabel": "Назва",
         "descriptionLabel": "Опис",
-        "ingredientsLabel": "Інгредієнти"
-    }
+        "ingredientsLabel": "Інгредієнти",
+        "addIngredientLabel": "Додати інгредієнт",
+        "selectProductOption": "Оберіть продукт",
+        "quantityPlaceholder": "Кількість",
+        "addButton": "Додати",
+        "cancelButton": "Скасувати"
+    },
+    "UserTable": {
+  "users": "Користувачі",
+  "id": "ID",
+  "firstName": "Імʼя",
+  "lastName": "Прізвище",
+  "email": "Електронна пошта",
+  "password": "Пароль",
+  "spotId": "ID локації",
+  "role": "Роль",
+  "actions": "Дії",
+  "edit": "Редагувати",
+  "delete": "Видалити",
+  "create": "Створити користувача",
+  "save": "Зберегти",
+  "cancel": "Скасувати",
+  "selectRole": "Виберіть роль",
+  "admin": "Адміністратор",
+  "manager": "Менеджер",
+  "chef": "Шеф-кухар",
+  "owner": "Власник",
+  "editUser": "Редагування користувача"
+}
+
 }

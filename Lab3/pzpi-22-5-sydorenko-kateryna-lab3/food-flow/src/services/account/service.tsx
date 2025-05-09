@@ -4,13 +4,14 @@ import { toast } from 'sonner';
 import { logIn as logInRequest } from './api';
 
 export default function useAccountService() {
-  const { login: setToken } = useAuth();
+  const { login: setToken, setRole } = useAuth();
   const router = useRouter();
   const logIn = async (email: string, password: string) => {
     await logInRequest(email, password)
       .then(response => {
         if (response.token) {
           setToken(response.token);
+          if (setRole) setRole(response.role);
           router.push('/');
         }
       })

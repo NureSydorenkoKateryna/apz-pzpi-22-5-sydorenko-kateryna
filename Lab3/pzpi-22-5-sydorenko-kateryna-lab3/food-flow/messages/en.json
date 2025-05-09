@@ -6,7 +6,8 @@
       "logout": "Logout",
       "dashboard": "Products",
       "techCards": "Recipes",
-      "login": "Login"
+      "login": "Login",
+      "users": "Users"
     },
     "LogIn": {
         "login": "Login",
@@ -54,7 +55,35 @@
       "viewButton": "View",
       "nameLabel": "Name",
       "descriptionLabel": "Description",
-      "ingredientsLabel": "Ingredients"
-    }
+      "ingredientsLabel": "Ingredients",
+      "editTechCard": "Edit Tech Card",
+      "addIngredientLabel": "Add Ingredient",
+      "selectProductOption": "Select a product",
+      "quantityPlaceholder": "Quantity",
+      "addButton": "Add",
+      "cancelButton": "Cancel"
+    },
+    "UserTable": {
+    "users": "Users",
+    "id": "ID",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "spotId": "Spot ID",
+    "role": "Role",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create User",
+    "save": "Save",
+    "cancel": "Cancel",
+    "selectRole": "Select Role",
+    "admin": "Admin",
+    "manager": "Manager",
+    "chef": "Chef",
+    "owner": "Owner",
+    "editUser": "Edit User"
+  }
 }
   

@@ -13,7 +13,7 @@ import { useAuth } from '@/lib/providers/authProvider';
 import { useAppDispatch } from '@/services/hooks';
 import { deleteProduct, fetchProductsWithRests, updateProduct } from '@/services/products/slice';
 import { Trash2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import ProductRestInput from './productRestInput';
 
@@ -38,6 +38,7 @@ export default function ProductTableRow({
   const [editedUnitId, setEditedUnitId] = useState(
     units.find(u => u.value === product.unit)?.id || null
   );
+  const format = useFormatter();
 
   const handleSave = async () => {
     const token = getToken();
@@ -99,7 +100,11 @@ export default function ProductTableRow({
         <ProductRestInput product={product} />
       </td>
       <td className="px-4 py-2 text-muted-foreground text-xs">
-        {product.rest?.updatedAt && new Date(product.rest.updatedAt).toLocaleString()}
+        {product.rest?.updatedAt &&
+          format.dateTime(new Date(product.rest.updatedAt), {
+            dateStyle: 'short',
+            timeStyle: 'short',
+          })}
       </td>
       <td className="px-4 py-2 flex items-center gap-2">
         {isEditing ? (
@@ -114,7 +119,7 @@ export default function ProductTableRow({
         ) : (
           <>
             <Button size="sm" variant="secondary" onClick={() => setIsEditing(true)}>
-                {t('edit')}
+              {t('edit')}
             </Button>
             <Button variant="destructive" size="icon" className="h-8 w-8" onClick={handleDelete}>
               <Trash2 className="h-4 w-4" />

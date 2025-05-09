@@ -9,9 +9,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, getRole } = useAuth();
   const pathname = usePathname();
   const t = useTranslations('HomePage');
+  const role = getRole ? getRole() : null;
 
   return (
     <header className="bg-white shadow-sm">
@@ -23,24 +24,43 @@ export default function Header() {
 
         <nav className="flex items-center gap-4">
           <LanguageSwitcher />
-          {isAuthenticated ? (
+          {isAuthenticated && role ? (
             <>
-              <Link
-                href="/product-rests"
-                className={`text-sm font-medium ${
-                  pathname.includes('/product-rests') ? 'text-primary' : 'text-muted-foreground'
-                }`}
-              >
-                {t('dashboard')}
-              </Link>
-              <Link
-                href="/tech-cards"
-                className={`text-sm font-medium ${
-                  pathname.includes('/tech-cards') ? 'text-primary' : 'text-muted-foreground'
-                }`}
-              >
-                {t('techCards')}
-              </Link>
+              {role === 'Admin' && (
+                <Link
+                  href="/users"
+                  className={`text-sm font-medium ${
+                    pathname.includes('/users') ? 'text-primary' : 'text-muted-foreground'
+                  }`}
+                >
+                  {t('users')}
+                </Link>
+              )}
+
+              {role === 'Chef' ||
+                (role === 'Manager' && (
+                  <>
+                    <Link
+                      href="/product-rests"
+                      className={`text-sm font-medium ${
+                        pathname.includes('/product-rests')
+                          ? 'text-primary'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      {t('dashboard')}
+                    </Link>
+                    <Link
+                      href="/tech-cards"
+                      className={`text-sm font-medium ${
+                        pathname.includes('/tech-cards') ? 'text-primary' : 'text-muted-foreground'
+                      }`}
+                    >
+                      {t('techCards')}
+                    </Link>
+                  </>
+                ))}
+
               <Button
                 variant="outline"
                 onClick={() => {

@@ -143,9 +143,15 @@ const productSlice = createSlice({
       .addCase(updateRestQuantitySlice.fulfilled, (state, action) => {
         const { productId, quantity } = action.meta.arg;
         const product = state.products?.find(p => p.id === productId);
-        if (product?.rest) {
-          product.rest.quantity = quantity;
-          product.rest.updatedAt = new Date().toLocaleDateString();
+        if (product?.rest && state.products) {
+          state.products = state.products?.map(p =>
+            p.id === productId
+              ? ({
+                  ...p,
+                  rest: { ...p.rest, quantity, updatedAt: new Date().toLocaleDateString() },
+                } as ProductWithRest)
+              : p
+          );
         }
       });
   },
