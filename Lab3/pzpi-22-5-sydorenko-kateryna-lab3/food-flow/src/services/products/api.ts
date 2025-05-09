@@ -47,7 +47,7 @@ export const deleteProduct = async (token: string, productId: number) => {
     throw new Error('Failed to delete product');
   }
 
-  return response.json();
+  return null;
 };
 
 export const createProducts = async (token: string, data: CreateProductRequest[]) => {

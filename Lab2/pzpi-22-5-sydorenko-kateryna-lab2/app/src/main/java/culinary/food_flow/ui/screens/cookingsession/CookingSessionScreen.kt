@@ -64,6 +64,23 @@ fun CookingSessionScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (measurementToken == null) {
+//            Button(
+//                onClick = {
+//                    selectedRecipe?.let { recipe ->
+//                        selectedIngredient?.let { ingredient ->
+//                            measurementViewModel.getToken(
+//                                productId = ingredient.productId.toString(),
+//                                techCardId = recipe.id.toString()
+//                            )
+//                        }
+//                    }
+//                }
+//            ) {
+//                Text("Start Manual Measurement")
+//            }
+//
+//            Spacer(modifier = Modifier.height(4.dp))
+
             Button(
                 onClick = {
                     selectedRecipe?.let { recipe ->
@@ -79,21 +96,16 @@ fun CookingSessionScreen(
                 Text("Start Manual Measurement")
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Button(
+             Button(
                 onClick = {
-                    selectedRecipe?.let { recipe ->
-                        selectedIngredient?.let { ingredient ->
-                            measurementViewModel.getToken(
-                                productId = ingredient.productId.toString(),
-                                techCardId = recipe.id.toString()
-                            )
+                        measurementViewModel.finishToken {
+                            onComplete()
                         }
-                    }
-                }
+                        onBack()
+                    },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Start Manual Measurement")
+                Text("Back")
             }
         } else {
             OutlinedTextField(
@@ -135,16 +147,16 @@ fun CookingSessionScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                    measurementViewModel.finishToken {
-                        onComplete()
-                    }
-                    onBack()
-                },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Back")
-        }
+//        Button(
+//            onClick = {
+//                    measurementViewModel.finishToken {
+//                        onComplete()
+//                    }
+//                    onBack()
+//                },
+//            modifier = Modifier.align(Alignment.CenterHorizontally)
+//        ) {
+//            Text("Back")
+//        }
     }
 }

@@ -4,7 +4,7 @@
         "subtitle": "Відстежуйте залишки їжі у ресторані та зменшуйте харчові відходи",
         "about": "Дізнайтеся більше про нас",
         "logout": "Вийти",
-        "dashboard": "Панель",
+        "dashboard": "Продукти",
         "techCards": "Рецепти",
         "login": "Увійти"
     },
@@ -17,5 +17,43 @@
         "email": "Електронна пошта",
         "password": "Пароль",
         "logout": "Вийти"
+    },
+    "ProductTable": {
+        "createProduct": "Створити новий продукт",
+        "productName": "Назва",
+        "shelfLife": "Термін придатності (днів)",
+        "selectUnit": "Оберіть одиницю виміру",
+        "cancel": "Скасувати",
+        "save": "Зберегти",
+        "unit": "Одиниця",
+        "rest": "Залишок",
+        "updated_at": "Оновлено",
+        "actions": "Дії",
+        "edit": "Редагувати"
+    },
+    "TechCardTable": {
+        "id": "ID",
+        "name": "Назва",
+        "actions": "Дії",
+        "cancel": "Скасувати",
+        "save": "Зберегти",
+        "edit": "Редагувати",
+        "techCards": "Техкарти",
+        "view": "Переглянути",
+        "create": "Створити",
+        "delete": "Видалити",
+        "selectProduct": "Оберіть продукт",
+        "quantity": "Кількість",
+        "add": "Додати",
+        "description": "Опис",
+        "createNewTechCard": "Створити нову техкарту",
+        "addIngredient": "Додати інгредієнт",
+        "ingredients": "Інгредієнти",
+        "placeholderQty": "К-сть",
+        "placeholderQuantity": "Кількість",
+        "viewButton": "Переглянути",
+        "nameLabel": "Назва",
+        "descriptionLabel": "Опис",
+        "ingredientsLabel": "Інгредієнти"
     }
-  }
+}

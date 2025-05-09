@@ -16,4 +16,21 @@ interface TechCardDto {
 interface TechCardsResponse {
     techCards: TechCardDto[];
   }
+
+
+  interface CreateIngredientRequest {
+    productId: number;
+    quantity: number;
+  }
+
+  interface CreateTechCardRequest {
+    name: string;
+    description: string;
+    ingredients: CreateIngredientRequest[];
+  }
+
+  interface CreateTechCardsRequest {
+    restaurantId?: string; // optional as marked by '?'
+    techChards: CreateTechCardRequest[];
+  }
   

@@ -9,16 +9,17 @@ import {
 import { getRests, updateRestQuantity as updateRestQuantityApi } from '@/services/rests/api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'sonner';
+import { RootState } from '../store';
 
 interface ProductsState {
-  products: ProductWithRest[];
+  products: ProductWithRest[] | null;
   units: UnitDto[];
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: ProductsState = {
-  products: [],
+  products: null,
   units: [],
   isLoading: false,
   error: null,
@@ -76,7 +77,7 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     updateRestQuantity(state, action: PayloadAction<{ productId: number; quantity: number }>) {
-      const product = state.products.find(p => p.id === action.payload.productId);
+      const product = state.products?.find(p => p.id === action.payload.productId);
       if (product?.rest) {
         product.rest.quantity = action.payload.quantity;
         product.rest.updatedAt = new Date().toISOString();
@@ -84,7 +85,8 @@ const productSlice = createSlice({
     },
     setProductRests(state, action: PayloadAction<RestDto[]>) {
       const rests = action.payload;
-      state.products = state.products.map(product => {
+      if (!state.products) return;
+      state.products = state.products?.map(product => {
         const rest = rests.find(r => r.productId === product.id.toString()) || null;
         return {
           ...product,
@@ -108,14 +110,15 @@ const productSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
-        state.products = state.products.filter(p => p.id !== action.payload);
+        state.products = state.products?.filter(p => p.id !== action.payload) ?? [];
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         const { productId, data } = action.meta.arg;
-        const product = state.products.find(p => p.id === productId);
+        const product = state.products?.find(p => p.id === productId) ?? [];
 
         if (product) {
-          state.products = state.products.map(p => (p.id === productId ? { ...p, ...data } : p));
+          state.products =
+            state.products?.map(p => (p.id === productId ? { ...p, ...data } : p)) ?? [];
         }
         toast.success('Product updated successfully', {
           description: 'The product has been updated.',
@@ -139,7 +142,7 @@ const productSlice = createSlice({
       })
       .addCase(updateRestQuantitySlice.fulfilled, (state, action) => {
         const { productId, quantity } = action.meta.arg;
-        const product = state.products.find(p => p.id === productId);
+        const product = state.products?.find(p => p.id === productId);
         if (product?.rest) {
           product.rest.quantity = quantity;
           product.rest.updatedAt = new Date().toLocaleDateString();
@@ -149,4 +152,14 @@ const productSlice = createSlice({
 });
 
 export const { updateRestQuantity, setProductRests } = productSlice.actions;
+
+export const selectProducts = (state: RootState) => {
+  return state.productsSlice.products?.map(
+    product =>
+      ({
+        ...product,
+      } as ProductDto)
+  );
+};
+
 export default productSlice;

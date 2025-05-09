@@ -4,7 +4,7 @@
       "subtitle": "Track your resturant leftovers and reduce food waste",
       "about": "Learn more about us",
       "logout": "Logout",
-      "dashboard": "Dashboard",
+      "dashboard": "Products",
       "techCards": "Recipes",
       "login": "Login"
     },
@@ -17,6 +17,44 @@
         "email": "Email",
         "password": "Password",
         "logout": "Logout"
+    },
+    "ProductTable": {
+      "createProduct": "Create New Product",
+      "productName": "Name",
+      "shelfLife": "Shelf Life (days)",
+      "selectUnit": "Select unit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "unit": "Unit",
+      "rest": "Rest",
+      "updated_at": "Updated at",
+      "actions": "Actions",
+      "edit": "Edit"
+    },
+    "TechCardTable": {
+      "id": "ID",
+      "name": "Name",
+      "actions": "Actions",
+      "cancel": "Cancel",
+      "save": "Save",
+      "edit": "Edit",
+      "techCards": "Tech Cards",
+      "view": "View",
+      "create": "Create",
+      "delete": "Delete",
+      "selectProduct": "Select Product",
+      "quantity": "Quantity",
+      "add": "Add",
+      "description": "Description",
+      "createNewTechCard": "Create New Tech Card",
+      "addIngredient": "Add Ingredient",
+      "ingredients": "Ingredients",
+      "placeholderQty": "Qty",
+      "placeholderQuantity": "Quantity",
+      "viewButton": "View",
+      "nameLabel": "Name",
+      "descriptionLabel": "Description",
+      "ingredientsLabel": "Ingredients"
     }
-  }
+}
   
