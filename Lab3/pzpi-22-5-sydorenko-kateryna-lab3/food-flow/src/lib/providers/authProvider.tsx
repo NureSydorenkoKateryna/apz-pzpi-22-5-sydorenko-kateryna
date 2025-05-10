@@ -19,7 +19,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    if (typeof window === 'undefined') return;
+    const token = window.localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
     }
@@ -27,21 +28,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (token: string) => {
-    localStorage.setItem('token', token);
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem('token', token);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    if (typeof window === 'undefined') return;
+    window.localStorage.removeItem('token');
     setIsAuthenticated(false);
   };
 
   const setRole = (role: string) => {
-    localStorage.setItem('role', role);
+    if (typeof window === 'undefined') return;
+
+    window.localStorage.setItem('role', role);
   };
 
   const getRole = () => {
-    return localStorage.getItem('role');
+    if (typeof window === 'undefined') return '';
+
+    return window.localStorage?.getItem('role');
+  };
+
+  const getToken = () => {
+    if (typeof window === 'undefined') return '';
+
+    return window.localStorage?.getItem('token');
   };
 
   return (
@@ -51,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         login,
         logout,
-        getToken: () => localStorage?.getItem('token'),
+        getToken,
         setRole,
         getRole,
       }}

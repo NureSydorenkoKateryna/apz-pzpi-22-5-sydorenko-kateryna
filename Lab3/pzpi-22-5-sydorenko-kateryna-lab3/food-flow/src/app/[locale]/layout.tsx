@@ -21,7 +21,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="min-h-screen grid grid-rows-[auto_1fr_auto] bg-[var(--background)] text-[var(--foreground)]">
+      <body
+        className="min-h-screen grid grid-rows-[auto_1fr_auto] bg-[var(--background)] text-[var(--foreground)]"
+        suppressHydrationWarning
+      >
         <Providers>
           <Header />
           <main>{children}</main>

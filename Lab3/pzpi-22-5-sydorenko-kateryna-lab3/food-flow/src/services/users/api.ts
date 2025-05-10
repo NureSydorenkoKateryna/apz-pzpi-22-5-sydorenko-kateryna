@@ -16,10 +16,7 @@ export const getUsers = async (token: string): Promise<UsersResponse> => {
   return response.json();
 };
 
-export const createUser = async (
-  token: string,
-  data: CreateUserRequest
-): Promise<number> => {
+export const createUser = async (token: string, data: CreateUserRequest): Promise<number> => {
   const response = await fetch(`${baseUrl}/users`, {
     method: 'POST',
     headers: {
@@ -36,7 +33,7 @@ export const createUser = async (
   return response.json();
 };
 
-export const updateUser = async (token: string, data: UpdateUserRequest): Promise<boolean> => {
+export const updateUser = async (token: string, data: UpdateUserRequest): Promise<void> => {
   const response = await fetch(`${baseUrl}/users/${data.userId}`, {
     method: 'PUT',
     headers: {
@@ -49,9 +46,6 @@ export const updateUser = async (token: string, data: UpdateUserRequest): Promis
   if (!response.ok) {
     throw new Error('Failed to update user');
   }
-
-  const result = await response.json();
-  return result === true;
 };
 
 export const deleteUser = async (token: string, userId: number): Promise<boolean> => {

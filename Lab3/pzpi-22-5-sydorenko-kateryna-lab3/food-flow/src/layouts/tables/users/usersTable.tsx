@@ -11,23 +11,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAuth } from '@/lib/providers/authProvider';
-import { AppDispatch, RootState } from '@/services/store';
+import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import {
   createUserThunk,
   deleteUserThunk,
   fetchUsers,
+  selectUsers,
   updateUserThunk,
 } from '@/services/users/slice';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function UserTableView() {
   const t = useTranslations('UserTable');
   const { getToken } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
-  const { users } = useSelector((state: RootState) => state.users);
+  const dispatch = useAppDispatch();
+  const users = useAppSelector(selectUsers);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
