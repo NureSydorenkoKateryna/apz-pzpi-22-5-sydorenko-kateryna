@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'sonner';
+import { RootState } from '../store';
 import { createUser, deleteUser, getUsers, updateUser } from './api';
 
 interface UsersState {
@@ -35,7 +36,7 @@ export const updateUserThunk = createAsyncThunk<
   UpdateUserRequest,
   { token: string; data: UpdateUserRequest }
 >('users/updateUser', async ({ token, data }) => {
-  await updateUser(token, data);
+  updateUser(token, data);
   return data;
 });
 
@@ -89,5 +90,7 @@ const usersSlice = createSlice({
       });
   },
 });
+
+export const selectUsers = (state: RootState) => state.users.users;
 
 export default usersSlice;

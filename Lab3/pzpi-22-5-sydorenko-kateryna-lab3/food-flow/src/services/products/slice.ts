@@ -54,7 +54,7 @@ export const updateProduct = createAsyncThunk<
   void,
   { token: string; productId: number; data: CreateProductRequest }
 >('products/update', async ({ token, productId, data }) => {
-  await updateProductApi(token, productId, data);
+  updateProductApi(token, productId, data);
 });
 
 export const deleteProduct = createAsyncThunk<number, { token: string; productId: number }>(

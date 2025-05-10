@@ -61,6 +61,5 @@ export const deleteUser = async (token: string, userId: number): Promise<boolean
     throw new Error('Failed to delete user');
   }
 
-  const result = await response.json();
-  return result === true;
+  return true;
 };

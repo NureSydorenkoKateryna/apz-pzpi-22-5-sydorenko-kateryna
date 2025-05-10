@@ -92,6 +92,4 @@ export const updateProduct = async (
   if (!response.ok) {
     throw new Error('Failed to update product');
   }
-
-  return response.json();
 };
