@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foodflow-app
+  namespace: foodflow
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: foodflow
+  template:
+    metadata:
+      labels:
+        app: foodflow
+    spec:
+      containers:
+        - name: foodflow
+          image: katerinasidorenko/food-flow:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ConnectionStrings__DefaultConnection
+              value: Server=food-flow-database;Database=food-flow;Port=5432;User Id=postgres;Password=postgres;Include Error Detail=false;
+            - name: JwtSettings__Key
+              value: c2c838b4d96d0e5fc5027887af3ac6fe03e67d9b651d5857a643589b15c73082456aa778458df22d12c340314c5a34c184ce1d4fdf149c2d4fbb0ee2b9a857712c93a2e7a6c2b73baaff78424d6ad1f355d0c65ee0075454d027ebb9cec31da23478efd97d723b6c108a134e940c23146dc99e229129ce6d9bcd5efe3bfdf1b7ef504189c3016bc14ef90270de9cd9dba28d0cf51ad5eeb6300aa69cb48f4060d8491c11d31959504ee3953da74bd01e8d43774052984c18e43bbf99dd1ae53baea807f5bd8c816b02a2c7fc642e4cf7f4aaa8c1d311914689ccc94566c5ddaf967e52b004cd5d07a6613d8a13554d86dac0afc4a0b127ffe23c7f8b97b9b939
