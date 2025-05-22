@@ -67,8 +67,6 @@ export const createProducts = async (token: string, data: CreateProductRequest[]
   if (!response.ok) {
     throw new Error('Failed to create products');
   }
-
-  return response.json();
 };
 
 export const updateProduct = async (

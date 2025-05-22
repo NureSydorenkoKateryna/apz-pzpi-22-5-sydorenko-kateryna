@@ -97,7 +97,7 @@ export default function AddTechCardDialog({ products }: Props) {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Name</label>
+              <label className="block text-sm font-medium mb-1">{t('name')}</label>
               <input
                 value={newCard.name}
                 onChange={e => setNewCard(prev => ({ ...prev, name: e.target.value }))}

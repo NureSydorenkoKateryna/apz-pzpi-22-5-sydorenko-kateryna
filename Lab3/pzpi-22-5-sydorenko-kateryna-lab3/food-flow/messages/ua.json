@@ -60,7 +60,8 @@
         "selectProductOption": "Оберіть продукт",
         "quantityPlaceholder": "Кількість",
         "addButton": "Додати",
-        "cancelButton": "Скасувати"
+        "cancelButton": "Скасувати",
+        "editTechCard": "Редагувати техкарту"
     },
     "UserTable": {
   "users": "Користувачі",

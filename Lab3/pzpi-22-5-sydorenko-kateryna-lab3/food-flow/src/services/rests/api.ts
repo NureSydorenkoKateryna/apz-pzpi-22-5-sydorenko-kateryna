@@ -37,6 +37,4 @@ export const updateRestQuantity = async (token: string, productId: number, quant
   if (!response.ok) {
     throw new Error('Failed to update product quantity');
   }
-
-  return response.json();
 };

@@ -47,7 +47,7 @@ export const createProducts = createAsyncThunk<
   void,
   { token: string; data: CreateProductRequest[] }
 >('products/create', async ({ token, data }) => {
-  await createProductsApi(token, data);
+  createProductsApi(token, data);
 });
 
 export const updateProduct = createAsyncThunk<
@@ -60,7 +60,7 @@ export const updateProduct = createAsyncThunk<
 export const deleteProduct = createAsyncThunk<number, { token: string; productId: number }>(
   'products/delete',
   async ({ token, productId }) => {
-    await deleteProductApi(token, productId);
+    deleteProductApi(token, productId);
     return productId;
   }
 );
@@ -69,7 +69,7 @@ export const updateRestQuantitySlice = createAsyncThunk<
   void,
   { token: string; productId: number; quantity: number }
 >('products/updateRestQuantity', async ({ token, productId, quantity }) => {
-  await updateRestQuantityApi(token, productId, quantity);
+  updateRestQuantityApi(token, productId, quantity);
 });
 
 const productSlice = createSlice({
@@ -112,6 +112,15 @@ const productSlice = createSlice({
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products?.filter(p => p.id !== action.payload) ?? [];
       })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        toast.error('Failed to delete product', {
+          description: action.error.message,
+          action: {
+            onClick: () => {},
+            label: 'Ok',
+          },
+        });
+      })
       .addCase(updateProduct.fulfilled, (state, action) => {
         const { productId, data } = action.meta.arg;
         const product = state.products?.find(p => p.id === productId) ?? [];
@@ -148,11 +157,20 @@ const productSlice = createSlice({
             p.id === productId
               ? ({
                   ...p,
-                  rest: { ...p.rest, quantity, updatedAt: new Date().toLocaleDateString() },
+                  rest: { ...p.rest, quantity, updatedAt: new Date().toString() },
                 } as ProductWithRest)
               : p
           );
         }
+      })
+      .addCase(updateRestQuantitySlice.rejected, (state, action) => {
+        toast.error('Failed to update rest quantity', {
+          description: action.error.message,
+          action: {
+            onClick: () => {},
+            label: 'Ok',
+          },
+        });
       });
   },
 });
